@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speak_up/pages/audio_screen.dart';
 import 'package:speak_up/widgets/player.dart';
-import 'package:speak_up/services/utils.dart';
+import 'package:speak_up/utils.dart';
 
 ValueNotifier<AudioObject?> currentlyPlaying = ValueNotifier(null);
 
@@ -25,7 +25,7 @@ class _AudioLibraryState extends State<AudioLibrary> {
           Column(
             children: [
               AppBar(
-                  title: Text('Miniplayer Demo'),
+                  title: Text('Miniplayer'),
                 backgroundColor: Colors.amber,
               ),
               Expanded(

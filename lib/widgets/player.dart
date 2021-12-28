@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:speak_up/pages/audio_library.dart';
 
-import 'package:speak_up/services/utils.dart';
+import 'package:speak_up/utils.dart';
 
 final ValueNotifier<double> playerExpandProgress =
 ValueNotifier(playerMinHeight);

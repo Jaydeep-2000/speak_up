@@ -1,7 +1,7 @@
+import 'package:speak_up/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:speak_up/pages/audio_player.dart';
-import 'package:speak_up/pages/help.dart';
+
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,6 +11,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  void uploadFileObject() async{
+    FileObject instance = new FileObject();
+    await instance.pickFiles();
+
+    //Navigate to image preview
+    Navigator.pushReplacementNamed(context, '/image_preview', arguments: {
+      'filename': instance.fileName,
+      'extension': instance.extension,
+      'size': instance.size,
+      'directory': instance.directory,
+    });
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -47,6 +63,7 @@ class _HomeState extends State<Home> {
         automaticallyImplyLeading: false,
       ),
       ),
+
       body: Center(
         child: Column(
           children: <Widget> [
@@ -58,22 +75,13 @@ class _HomeState extends State<Home> {
                 height: 275.0,
               ),
             ),
-
-            // Container(
-            //   margin: EdgeInsets.fromLTRB(50, 5.0, 50, 0),
-            //   child: IconButton(
-            //     onPressed: () {},
-            //     icon: Icon(Icons.add),
-            //     tooltip: 'Upload file',
-            //     iconSize: 60,
-            //   ),
-            //
-            // ),
-
             Container(
               margin: EdgeInsets.fromLTRB(50, 5.0, 50, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  uploadFileObject();
+                  Navigator.pushNamed(context , '/image_preview');
+                },
                 child: Icon(Icons.add,
                 size: 50,
                 color: Colors.white),
@@ -119,7 +127,7 @@ class _HomeState extends State<Home> {
             ),
           onPressed: () {
             //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AudioPlayer()));
-            Navigator.pushNamed(context, '/audiolibrary');
+            Navigator.pushNamed(context, '/audio_library');
           },
 
           backgroundColor: Colors.amber,

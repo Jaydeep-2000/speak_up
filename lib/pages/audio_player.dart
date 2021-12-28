@@ -3,7 +3,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 
-
 class AudioPlayer extends StatefulWidget {
   set durationHandler(Null Function(dynamic d) durationHandler) {}
 

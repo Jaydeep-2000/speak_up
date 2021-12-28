@@ -4,6 +4,8 @@ import 'package:speak_up/pages/splash.dart';
 import 'package:speak_up/pages/help.dart';
 import 'package:speak_up/pages/audio_player.dart';
 import 'package:speak_up/pages/audio_library.dart';
+import 'package:speak_up/pages/image_preview.dart';
+import 'package:speak_up/pages/text_preview.dart';
 
 
 void main() => runApp(MaterialApp(
@@ -13,8 +15,10 @@ void main() => runApp(MaterialApp(
     '/':(context) => Splash(),
     '/home': (context) => Home(),
     '/help': (context) => Help(),
-    '/player': (context) => AudioPlayer(),
-    '/audiolibrary': (context) => AudioLibrary(),
+    // '/player': (context) => AudioPlayer(),
+    '/audio_library': (context) => AudioLibrary(),
+    '/image_preview': (context) => ImagePreview(),
+    '/text_preview' : (context) => TextPreview(),
   },
 ));
 

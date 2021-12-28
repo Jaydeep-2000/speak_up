@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:speak_up/widgets/audio_list_tile.dart';
 
-import 'package:speak_up/services/utils.dart';
+import 'package:speak_up/utils.dart';
+
 
 typedef OnTap(final AudioObject audioObject);
 
