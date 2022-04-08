@@ -1,6 +1,14 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:speak_up/utils.dart';
 import 'package:flutter/material.dart';
+// import 'dart:io' as io;
+// import 'package:path/path.dart' as path;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'image_preview.dart';
 
 
 class Home extends StatefulWidget {
@@ -12,23 +20,84 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  void uploadFileObject() async{
-    FileObject instance = new FileObject();
-    await instance.pickFiles();
+  createDir() async {
+    //checking for permissions
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
 
-    //Navigate to image preview
-    Navigator.pushReplacementNamed(context, '/image_preview', arguments: {
-      'filename': instance.fileName,
-      'extension': instance.extension,
-      'size': instance.size,
-      'directory': instance.directory,
-    });
+    //creating app folders
+    String textpath = "/storage/emulated/0/SpeakUp/TextFiles";
+    String audioPath = "/storage/emulated/0/SpeakUp/Audio";
+    String finalPath = "/storage/emulated/0/SpeakUp"; //app folder
+
+    var finalDir = Directory(finalPath);
+    var textDir = Directory(textpath);
+    var audioDir = Directory(audioPath);
+    print(finalDir);
+    print(textDir);
+    print(audioDir);
+
+    //main directory
+    bool finaldirExists = await finalDir.exists();
+    if(!finaldirExists){
+      finalDir.create(/*recursive=true*/); //pass recursive as true if directory is recursive
+    }
+
+    //text sub directory
+    bool textdiExists = await textDir.exists();
+    if(!textdiExists){
+      textDir.create(/*recursive=true*/); //pass recursive as true if directory is recursive
+    }
+
+    //audio sub directory
+    bool audiodirExists = await audioDir.exists();
+    if(!audiodirExists){
+      audioDir.create(/*recursive=true*/); //pass recursive as true if directory is recursive
+    }
+
+
 
   }
 
 
+  Future <void> pickFiles() async{
+    //getting platformfile
+    FilePickerResult? _paths = await FilePicker.platform.pickFiles();
+
+    //cheking for null
+    if (_paths != null) {
+      PlatformFile file = _paths.files.first;
+
+      InputFile inputFile = new InputFile(file.name, file.size, file.path!, file.extension!);
+
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImagePreview(),
+          // Pass the arguments as part of the RouteSettings. The
+          // DetailScreen reads the arguments from these settings.
+          settings: RouteSettings(
+            arguments: inputFile,
+          ),
+        ),
+      );
+
+  }
+  }
+
+  @override
+  initState(){
+    createDir(); //call your method here
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -78,10 +147,7 @@ class _HomeState extends State<Home> {
             Container(
               margin: EdgeInsets.fromLTRB(50, 5.0, 50, 0),
               child: TextButton(
-                onPressed: () {
-                  uploadFileObject();
-                  Navigator.pushNamed(context , '/image_preview');
-                },
+                onPressed:pickFiles,
                 child: Icon(Icons.add,
                 size: 50,
                 color: Colors.white),
@@ -93,8 +159,8 @@ class _HomeState extends State<Home> {
 
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(20, 20, 0, 0),
-              child: Text(
+              margin: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+              child: const Text(
 
                 'Upload file...',
                     style:TextStyle(
@@ -103,8 +169,8 @@ class _HomeState extends State<Home> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Text(
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: const Text(
 
                   'Upload Image files only....',
                   style:TextStyle(
@@ -137,5 +203,7 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
 
   

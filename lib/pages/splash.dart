@@ -6,11 +6,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
 
+
   @override
   State<Splash> createState() => _SplashState();
 }
 
 class _SplashState extends State<Splash> {
+
+
 
   void _navigatetohome() async{
     await Future.delayed(Duration(milliseconds: 5000), () {});

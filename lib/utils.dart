@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
+
+
+
+//AudioObject class
 class AudioObject {
   final String title, subtitle, img;
 
@@ -20,42 +21,55 @@ double percentageFromValueInRange({required final double min, max, value}) {
   return (value - min) / (max - min);
 }
 
-class FileObject {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
-  String? fileName;
-  int? size;
-  List<PlatformFile>? _paths;
-  String? directory;
-  String? extension;
-  //bool _isLoading = false;
-  bool _userAborted = false;
-  bool _multiPick = false;
-  FileType _pickingType = FileType.any;
-
-  Future <void> pickFiles() async{
-
-    FilePickerResult? _paths = await FilePicker.platform.pickFiles();
 
 
-    if (_paths != null) {
-      PlatformFile file = _paths.files.first;
+//InputFile class
+class InputFile {
+  String fileName;
+  int size;
+  String directory;
+  String extension;
 
-     //assigning values to parameters
-      this.fileName = file.name;
-      this.extension = file.extension;
-      this.size = file.size;
-      this.directory = file.path;
-    }
+  InputFile(this.fileName, this.size, this.directory, this.extension);
+
+  Future uploadFile() async {
+    print("onupload function");
+    var resJson;
+    var selectedFile = File(directory);
+    print(selectedFile);
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("http://127.0.0.1:5000/Text-Recognition"),
+    );
+    Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    request.files.add(
+      http.MultipartFile(
+        'inputfile',
+        selectedFile.readAsBytes().asStream(),
+        selectedFile.lengthSync(),
+        filename: fileName,
+      ),
+    );
+    request.headers.addAll(headers);
+    //print("request: " + request.toString());
+    var res = await request.send();
+    http.Response response = await http.Response.fromStream(res);
+
+    resJson = jsonDecode(response.body);
+    print(resJson);
+    // Navigator.pushNamed(context, '/text_preview');
   }
 }
 
-class TextRecognizer{
-  // String? text;
-  // File? file;
 
-  // Future <void> scanText() async {
-  //
-  //   final text = await FirebaseMLApi.recogniseText(file);
-  // }
+//class TextExtractor
+class TextExtractor{
+  String text;
+  String textFile;
+  InputFile inputFile;
+
+  TextExtractor(this.text, {required this.textFile, required this.inputFile});
+
 }
+
+

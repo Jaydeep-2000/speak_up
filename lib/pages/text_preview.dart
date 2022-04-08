@@ -14,11 +14,19 @@ class _TextPreviewState extends State<TextPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text(
+          'Text',
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+        backgroundColor: Colors.amber,
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
+        centerTitle: true,
       ),
       body:Column(
         children: [
